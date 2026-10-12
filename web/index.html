@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#070d16">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Heat">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="icon" href="assets/icon-192.png">
+<title>Heat</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="aurora" aria-hidden="true"></div>
+
+<main id="app">
+
+  <!-- ============ Terms (first launch) ============ -->
+  <section id="s-terms" class="screen" hidden>
+    <div class="pad">
+      <h1>Terms of Use</h1>
+      <p class="muted">Please read before using Heat.</p>
+    </div>
+    <div id="termsGate" class="terms scroll"></div>
+    <div class="pad foot">
+      <label class="check"><input type="checkbox" id="termsTick"><span>I am 18 or older and I agree to these terms</span></label>
+      <button id="termsGo" class="big primary" disabled><b>I agree</b></button>
+    </div>
+  </section>
+
+  <!-- ============ Home ============ -->
+  <section id="s-home" class="screen" hidden>
+    <header class="bar">
+      <button id="brand" class="brand" aria-label="Heat">
+        <svg viewBox="0 0 64 64" width="26" height="26" aria-hidden="true"><use href="#flame"/></svg>
+        <span>Heat</span>
+      </button>
+      <span class="spacer"></span>
+      <button id="themeBtn" class="ghost">Auto</button>
+      <button id="meBtn" class="me" aria-label="Profile"><span id="meAv"></span></button>
+    </header>
+
+    <div class="pad hero">
+      <p id="greet" class="greet"></p>
+      <h1 id="meName" class="name"></h1>
+      <p class="ask">What would you like to do?</p>
+    </div>
+
+    <div class="pad actions">
+      <button id="btnCreate" class="big primary"><b>Create a room</b><small>Show a code. Others scan it to join you.</small></button>
+      <button id="btnJoin" class="big"><b>Join a room</b><small>Scan the code on someone else's screen.</small></button>
+    </div>
+
+    <p id="tip" class="pad note" hidden>Tip: tap Share, then Add to Home Screen, to open Heat like an app and use it offline.</p>
+    <p class="pad note">Everyone needs to be on the same Wi-Fi, or on one phone's hotspot. No internet is needed once Heat is installed.</p>
+
+    <footer class="pad center">
+      <button id="termsLink" class="link">Terms of Use</button>
+    </footer>
+  </section>
+
+  <!-- ============ Room ============ -->
+  <section id="s-room" class="screen" hidden>
+    <header class="bar">
+      <button id="roomBack" class="ghost" aria-label="Leave room">‹ Leave</button>
+      <div class="title"><b id="roomTitle">Room</b><small id="roomSub"></small></div>
+      <span class="spacer"></span>
+      <button id="addBtn" class="ghost" hidden>+ Add</button>
+    </header>
+
+    <div id="people" class="people"></div>
+    <div id="xfers" class="xfers" hidden></div>
+    <div id="log" class="log" aria-live="polite"></div>
+
+    <form id="composer" class="composer" autocomplete="off">
+      <label class="attach" aria-label="Send files">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5l-8.6 8.6a5.5 5.5 0 0 1-7.8-7.8l9-9a3.7 3.7 0 0 1 5.2 5.2l-9 9a1.8 1.8 0 0 1-2.6-2.6l8.3-8.3"/></svg>
+        <input id="filePick" type="file" multiple hidden>
+      </label>
+      <input id="msgBox" type="text" placeholder="Message" maxlength="2000" enterkeyhint="send">
+      <button class="send" type="submit" aria-label="Send message">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M3 20l18-8L3 4v6l11 2-11 2z"/></svg>
+      </button>
+    </form>
+  </section>
+
+  <!-- ============ Burn ============ -->
+  <section id="s-burn" class="screen" hidden>
+    <header class="bar">
+      <button id="burnBack" class="ghost">‹ Back</button>
+      <span class="spacer"></span>
+    </header>
+    <div class="pad center">
+      <button id="flameBtn" class="flame" aria-label="Flame">
+        <svg viewBox="0 0 64 64" width="96" height="96" aria-hidden="true"><use href="#flame"/></svg>
+      </button>
+      <h1>Burn</h1>
+      <p class="muted">Files you received in this session. Burned files go to Recently burned.</p>
+    </div>
+    <div class="tabs pad">
+      <button id="tabFiles" class="tab on">Received</button>
+      <button id="tabBurned" class="tab">Recently burned</button>
+    </div>
+    <div id="burnList" class="burnlist scroll"></div>
+    <div class="pad foot" id="burnFoot"></div>
+  </section>
+
+  <!-- ============ Profile ============ -->
+  <section id="s-profile" class="screen" hidden>
+    <header class="bar">
+      <button id="profBack" class="ghost">‹ Back</button>
+      <div class="title"><b>Profile</b></div>
+      <span class="spacer"></span>
+    </header>
+    <div class="pad center prof">
+      <button id="profAv" class="bigav" aria-label="Choose photo"></button>
+      <p class="muted small">Tap the picture to choose a photo</p>
+      <div id="avChoices" class="choices"></div>
+      <div class="row">
+        <button id="photoBtn" class="link">Choose photo</button>
+        <button id="photoDel" class="link" hidden>Remove photo</button>
+      </div>
+      <input id="photoPick" type="file" accept="image/*" hidden>
+      <p id="photoErr" class="err small" hidden>Couldn't use that picture</p>
+      <label class="field"><span>Your name</span>
+        <input id="nameBox" type="text" maxlength="16" autocomplete="off">
+        <small id="nameCount" class="muted">0/16</small>
+      </label>
+      <button id="nameSave" class="big primary"><b>Save name</b></button>
+      <p class="muted small">Your name and photo are visible to the people in your room.</p>
+      <p id="eggLine" class="mc gold-text" hidden>Easter egg found</p>
+    </div>
+  </section>
+</main>
+
+<!-- ============ Pairing sheet ============ -->
+<div id="pair" class="sheet" hidden>
+  <div class="panel">
+    <div class="phead"><b id="pairTitle">Connect</b><button id="pairClose" class="ghost">Close</button></div>
+    <p id="pairHint" class="muted"></p>
+    <div id="pairWolf" class="wolfbox" hidden></div>
+    <div id="pairQr" class="qrbox" hidden></div>
+    <div id="pairScan" class="scanbox" hidden>
+      <video id="scanVideo" muted playsinline></video>
+      <div class="reticle"></div>
+    </div>
+    <p id="pairErr" class="err" hidden></p>
+    <div id="pairPaste" hidden>
+      <textarea id="pasteBox" rows="3" placeholder="Paste the link here" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+      <button id="pasteGo" class="big primary"><b>Use this link</b></button>
+    </div>
+    <div class="row wrap" id="pairBtns"></div>
+  </div>
+</div>
+
+<!-- ============ Send / incoming / confirm / sike / egg ============ -->
+<div id="dlg" class="sheet center-sheet" hidden>
+  <div class="panel small-panel">
+    <b id="dlgTitle"></b>
+    <p id="dlgBody" class="muted"></p>
+    <div id="dlgExtra"></div>
+    <div class="row end" id="dlgBtns"></div>
+  </div>
+</div>
+
+<div id="egg" class="sheet egg" hidden>
+  <div class="eggbox">
+    <img id="eggImg" src="assets/egg.webp" alt="">
+    <p class="mc gold-text big-mc">You found the secret!</p>
+    <p class="eggtxt">Moo! Your name is now gold in blocky letters, and the Highland cow profile picture is unlocked.</p>
+    <button id="eggEquip" class="big primary"><b>Equip it</b></button>
+    <button id="eggLater" class="link">Later</button>
+  </div>
+</div>
+
+<div id="toasts" class="toasts" aria-live="polite"></div>
+
+<!-- flame symbol -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="fg" x1="0" y1="1" x2="0.4" y2="0">
+      <stop offset="0" stop-color="#e0489f"/><stop offset=".55" stop-color="#ff9d3a"/><stop offset="1" stop-color="#ffe27a"/>
+    </linearGradient>
+    <symbol id="flame" viewBox="0 0 64 64">
+      <path d="M32 3c3 10 14 17 14 32 0 13-8 26-14 26S18 48 18 35c0-6 3-10 6-13 0 6 3 8 5 8-2-9 0-19 3-27z" fill="url(#fg)"/>
+      <path d="M32 36c3 5 7 8 7 14 0 6-3 9-7 9s-7-3-7-9c0-6 4-9 7-14z" fill="#fff4c9" opacity=".92"/>
+    </symbol>
+  </defs>
+</svg>
+
+<script src="vendor/qrcode.js"></script>
+<script src="vendor/jsQR.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
